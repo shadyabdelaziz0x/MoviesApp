@@ -13,10 +13,11 @@ interface Actor {
 }
 
 export interface MovieDetails {
+  id: string;
   title: string;
   poster?: string;
   description?: string;
   actors: Actor[];
   reviews: Review[];
-  keywords: string[];
+  keywords?: string;
 }

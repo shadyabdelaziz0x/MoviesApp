@@ -3,7 +3,7 @@ import {Movie, RequestError, RequestStatus} from '../models';
 import {moviesService} from '@shady0x7cb/network-sdk';
 import {ReducerType} from './types';
 import {AppState} from '../app/store';
-import {GetMoviesResponse} from '@shady0x7cb/network-sdk/dist/esm/types/getMoviesResponse';
+import {GetMoviesResponse} from '@shady0x7cb/network-sdk';
 
 const INITIAL_MOVIES_NUMBER = 10;
 
@@ -19,7 +19,7 @@ const initialState: MoviesState = {
   loading: 'idle',
 };
 
-export enum AllergensActionType {
+export enum MoviesActionType {
   FetchMovies = 'movies/fetchMovies',
 }
 
@@ -47,7 +47,7 @@ export const fetchMovies = createAsyncThunk<
   {data: Array<Movie>},
   {query: string; isInitial?: boolean},
   {state: AppState; rejectValue: RequestError}
->(AllergensActionType.FetchMovies, async (input, {rejectWithValue}) => {
+>(MoviesActionType.FetchMovies, async (input, {rejectWithValue}) => {
   try {
     const data = await moviesService.getMovies(input.query);
     const movies = moviesMapper(data);

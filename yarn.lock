@@ -1787,10 +1787,10 @@
     redux-thunk "^3.1.0"
     reselect "^5.1.0"
 
-"@shady0x7cb/network-sdk@^0.0.23":
-  version "0.0.23"
-  resolved "https://registry.yarnpkg.com/@shady0x7cb/network-sdk/-/network-sdk-0.0.23.tgz#1f106b4e6b89f78771d680ffb045694a27119385"
-  integrity sha512-svEYwCKb1H2+xCsKqRAXlnBL6HinyboiJ01xSOjtm7FjZpdqgV5f+wBF7px4Diwrtc85UkWFk4jBM2nPdgovqA==
+"@shady0x7cb/network-sdk@^0.0.24":
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/@shady0x7cb/network-sdk/-/network-sdk-0.0.24.tgz#b4c20d8cb4f90c9acdf9a1800c42b708cf55172f"
+  integrity sha512-nH/sU0catxk0e3lhPo0OGeLZww6GjX1FJrajUV7DE9aKrDQvQazTrnIZvm13eln/hyXSjAENGWMCfggYYhRtZg==
 
 "@sideway/address@^4.1.5":
   version "4.1.5"

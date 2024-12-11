@@ -6,12 +6,13 @@ import {
   ThunkAction,
 } from '@reduxjs/toolkit';
 import {persistStore, persistReducer} from 'redux-persist';
-import {moviesReducer} from '../slices';
+import {movieDetailsReducer, moviesReducer} from '../slices';
 
 export type AppState = ReturnType<typeof appReducer>;
 
 const appReducer = combineReducers({
   movies: moviesReducer,
+  movieDetails: movieDetailsReducer,
 });
 
 const rootReducer = (state: AppState | undefined, action: Action) => {
