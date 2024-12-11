@@ -1,4 +1,9 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {Movie, RequestError, RequestStatus} from '../models';
+import {moviesService} from '@shady0x7cb/network-sdk';
+import {ReducerType} from './types';
+import {AppState} from '../app/store';
+import {GetMoviesResponse} from '@shady0x7cb/network-sdk/dist/esm/types/getMoviesResponse';
 
 export interface MoviesState {
   entities: Array<Movie>;
@@ -13,72 +18,58 @@ const initialState: MoviesState = {
 };
 
 export enum AllergensActionType {
-  FetchAllergens = 'allergens/fetchAllergens',
+  FetchMovies = 'movies/fetchMovies',
 }
 
-export const fetchAllergens = createAsyncThunk<
-  AllergensPayload,
-  void,
+const moviesMapper = (response: GetMoviesResponse): Array<Movie> => {
+  const movies: Array<Movie> = response.description.map(movie => ({
+    id: movie['#IMDB_ID'],
+    title: movie['#TITLE'],
+    poster: movie['#IMG_POSTER'],
+    posterWidth: movie.photo_width,
+    posterHeight: movie.photo_height,
+  }));
+  return movies;
+};
+
+export const fetchMovies = createAsyncThunk<
+  {data: Array<Movie>},
+  {query: string},
   {state: AppState; rejectValue: RequestError}
->(
-  AllergensActionType.FetchAllergens,
-  async (_, {getState, rejectWithValue}) => {
-    try {
-      const api = getState().config.api;
-      const data = await api.getAllergens();
-      return {data};
-    } catch (err) {
-      return rejectWithValue(err as RequestError);
-    }
-  },
-);
+>(AllergensActionType.FetchMovies, async (input, {rejectWithValue}) => {
+  try {
+    const data = await moviesService.getMovies(input.query);
+    return {data: moviesMapper(data)};
+  } catch (err) {
+    return rejectWithValue(err as RequestError);
+  }
+});
 
 const moviesSlice = createSlice({
-  name: ReducerType.Allergens,
+  name: ReducerType.Movies,
   initialState,
   reducers: {
-    resetAllergens: state => ({...initialState, entities: state.entities}),
-    setSelectedAllergens: (state, action) => {
-      state.selectedAllergens = action.payload;
-    },
+    resetMovies: () => initialState,
   },
   extraReducers: builder => {
     builder
-      .addCase(fetchAllergens.fulfilled, (state, action) => {
+      .addCase(fetchMovies.fulfilled, (state, action) => {
         state.entities = action.payload.data;
         state.loading = 'idle';
         state.error = null;
       })
-      .addCase(fetchAllergens.pending, state => {
+      .addCase(fetchMovies.pending, state => {
         state.loading = 'pending';
       })
-      .addCase(fetchAllergens.rejected, (state, action) => {
+      .addCase(fetchMovies.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = 'idle';
       });
   },
 });
 
-export const {resetAllergens, setSelectedAllergens} = allergensSlice.actions;
+export const {resetMovies} = moviesSlice.actions;
 
-export const selectAllergens = (state: AppState) => state.allergens;
-
-export const selectSelectedAllergens = (state: AppState) =>
-  state.allergens.selectedAllergens;
-
-export const selectSelectedAllergenNames = createSelector(
-  (state: AppState) => {
-    const {entities: allergens, selectedAllergens} = state.allergens;
-    return {allergens, selectedAllergens};
-  },
-  ({allergens, selectedAllergens}) => {
-    if (!selectedAllergens) return [];
-    const selected = selectedAllergens.map(i => {
-      const allergen = allergens.find(a => a.allergen_id === i.allergen_id);
-      return allergen ? allergen.name ?? '' : '';
-    });
-    return selected;
-  },
-);
+export const selectMovies = (state: AppState) => state.movies;
 
 export const moviesReducer = moviesSlice.reducer;
