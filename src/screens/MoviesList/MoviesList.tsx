@@ -5,14 +5,32 @@ import {MovieCard, SearchList} from '../../components';
 import {Movie} from '../../models';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchMovies, selectMovies} from '../../slices';
+import {useNavigation} from '@react-navigation/native';
+import {AppRoutes} from '../../navigation';
 
 const MoviesList = () => {
   const dispatch = useAppDispatch();
+  const {navigate} = useNavigation<any>();
   const {entities} = useAppSelector(selectMovies);
 
-  const renderMovieItem: ListRenderItem<Movie> = useCallback(({item}) => {
-    return <MovieCard movie={item} />;
-  }, []);
+  const navigateToMovieDetails = useCallback(
+    (movieId: string) => {
+      navigate(AppRoutes.MovieDetails, {movieId});
+    },
+    [navigate],
+  );
+
+  const renderMovieItem: ListRenderItem<Movie> = useCallback(
+    ({item}) => {
+      return (
+        <MovieCard
+          onClick={() => navigateToMovieDetails(item.id)}
+          movie={item}
+        />
+      );
+    },
+    [navigateToMovieDetails],
+  );
 
   const renderSeparator = useCallback(() => {
     return <View style={styles.separator} />;

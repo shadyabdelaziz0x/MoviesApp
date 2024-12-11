@@ -6,12 +6,12 @@
  */
 
 import React, {useEffect} from 'react';
-import {SafeAreaView} from 'react-native';
-import {MoviesList} from './src/screens';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {useAppDispatch, useAppSelector} from './src/hooks';
 import {fetchMovies, selectMovies} from './src/slices';
 import {Provider} from 'react-redux';
 import {store} from './src/app/store';
+import {AppNavigation} from './src/navigation';
 
 function AppView(): React.JSX.Element {
   const dispatch = useAppDispatch();
@@ -22,8 +22,8 @@ function AppView(): React.JSX.Element {
   }, [dispatch, entities]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <MoviesList />
+    <SafeAreaView style={styles.container}>
+      <AppNavigation />
     </SafeAreaView>
   );
 }
@@ -35,5 +35,9 @@ function App(): React.JSX.Element {
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {flex: 1},
+});
 
 export default App;

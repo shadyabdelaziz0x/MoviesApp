@@ -4,7 +4,7 @@ import {createImageProgress} from 'react-native-image-progress';
 
 interface ImageProps {
   style?: ImageStyle;
-  src?: string;
+  src?: string | number;
   resizeMode?: ResizeMode;
 }
 
@@ -12,9 +12,12 @@ const ProgressImage = createImageProgress(FastImage);
 
 const Image = ({style, src, resizeMode}: ImageProps) => {
   const source = React.useMemo(
-    () => ({
-      uri: src,
-    }),
+    () =>
+      typeof src === 'number'
+        ? src
+        : {
+            uri: `${src}`,
+          },
     [src],
   );
   return (
