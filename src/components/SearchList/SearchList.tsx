@@ -7,16 +7,25 @@ import SearchBar from '../SearchBar';
 interface SearchListProps<T extends {id: string}> {
   style?: ViewStyle; // Additional styles for the card
   data: T[]; // Generic data prop
+  isLoading?: boolean;
   renderListItem: ListRenderItem<T>;
   filter: (filterValue: string | null) => void;
   renderSeparator: () => React.ReactNode;
+  renderEmptyView?: () => React.ReactNode;
+  LoadingView: () => React.ReactNode;
 }
+
+const ITEM_LENGTH = 300;
+const SEPARATOR_LENGTH = 16;
 
 const SearchList = <T extends {id: string}>({
   data,
+  isLoading,
   filter,
   renderListItem,
   renderSeparator,
+  renderEmptyView,
+  LoadingView,
 }: SearchListProps<T>) => {
   const {query, updateQuery, debouncedQuery} = useSearch<string>();
 
@@ -27,8 +36,8 @@ const SearchList = <T extends {id: string}>({
   const getItemLayout = (_: ArrayLike<T> | null | undefined, index: number) => {
     return {
       index,
-      offset: 300 * index,
-      length: 300,
+      offset: (ITEM_LENGTH + SEPARATOR_LENGTH) * index,
+      length: ITEM_LENGTH,
     };
   };
 
@@ -36,19 +45,23 @@ const SearchList = <T extends {id: string}>({
     <Fragment>
       <SearchBar onChange={updateQuery} value={query ?? ''} />
       <Fragment>
-        <FlatList
-          data={data}
-          renderItem={renderListItem}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
-          ItemSeparatorComponent={renderSeparator}
-          getItemLayout={getItemLayout}
-          removeClippedSubviews={true}
-          initialNumToRender={10}
-          maxToRenderPerBatch={5}
-          windowSize={5}
-        />
-        {/* {data.length === 0 && <EmptyList style={styles.empty} />} */}
+        {isLoading ? (
+          <LoadingView />
+        ) : (
+          <FlatList
+            data={data}
+            renderItem={renderListItem}
+            keyExtractor={item => item.id}
+            contentContainerStyle={styles.listContainer}
+            ItemSeparatorComponent={renderSeparator}
+            getItemLayout={getItemLayout}
+            removeClippedSubviews={true}
+            initialNumToRender={10}
+            maxToRenderPerBatch={5}
+            windowSize={5}
+            ListEmptyComponent={renderEmptyView}
+          />
+        )}
       </Fragment>
     </Fragment>
   );

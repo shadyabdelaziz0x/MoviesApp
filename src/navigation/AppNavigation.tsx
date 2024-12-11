@@ -19,7 +19,15 @@ const AppNavigation = () => {
         <Stack.Screen
           name={AppRoutes.MovieDetails}
           component={MovieDetails}
-          options={{headerShown: true}}
+          options={{
+            headerShown: true,
+            headerBackTitle: 'Back',
+            headerTintColor: 'white',
+            headerStyle: {
+              backgroundColor: '#000',
+            },
+            headerTitle: '',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

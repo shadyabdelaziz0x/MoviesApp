@@ -1,4 +1,5 @@
 interface Review {
+  id: string;
   author: {
     name: string;
   };
@@ -6,8 +7,7 @@ interface Review {
   body: string;
 }
 
-interface Actor {
-  '@type': string;
+export interface Actor {
   url: string;
   name: string;
 }
@@ -17,7 +17,7 @@ export interface MovieDetails {
   title: string;
   poster?: string;
   description?: string;
-  actors: Actor[];
-  reviews: Review[];
-  keywords?: string;
+  actors?: Actor[];
+  reviews?: Review[];
+  keywords?: string[];
 }

@@ -34,10 +34,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: 300,
-    backgroundColor: 'black',
     borderRadius: 12,
     flexDirection: 'row',
-    shadowColor: '#fff',
   },
   button: {
     width: '100%',

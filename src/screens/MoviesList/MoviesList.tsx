@@ -1,17 +1,24 @@
 import React, {useCallback} from 'react';
 import {ListRenderItem, StyleSheet, Text, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {MovieCard, SearchList} from '../../components';
+import {EmptyView, MovieCard, SearchList} from '../../components';
 import {Movie} from '../../models';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fetchMovies, selectMovies} from '../../slices';
-import {useNavigation} from '@react-navigation/native';
+import {fetchMovies, resetMovieDetails, selectMovies} from '../../slices';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {AppRoutes} from '../../navigation';
+import MoviesListSkeleton from './MoviesList.skeleton';
 
 const MoviesList = () => {
   const dispatch = useAppDispatch();
   const {navigate} = useNavigation<any>();
-  const {entities} = useAppSelector(selectMovies);
+  const {entities, loading} = useAppSelector(selectMovies);
+  const isLoading = loading === 'pending';
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(resetMovieDetails());
+    }, [dispatch]),
+  );
 
   const navigateToMovieDetails = useCallback(
     (movieId: string) => {
@@ -43,22 +50,30 @@ const MoviesList = () => {
     [dispatch],
   );
 
+  const renderEmptyView = useCallback(() => {
+    return <EmptyView title={'Cannot Find Movies'} />;
+  }, []);
+
   return (
-    <LinearGradient colors={['#000000', 'red']} style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.header}>Movies</Text>
       <SearchList
         data={entities}
+        isLoading={isLoading}
         renderListItem={renderMovieItem}
         filter={onFilter}
         renderSeparator={renderSeparator}
+        renderEmptyView={renderEmptyView}
+        LoadingView={MoviesListSkeleton}
       />
-    </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#800000',
   },
   header: {
     fontSize: 28,

@@ -1,23 +1,24 @@
 import React from 'react';
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 
-interface EmptyListProps {
+interface EmptyViewProps {
   style?: ViewStyle;
+  title?: string;
 }
 
-const EmptyList = ({style}: EmptyListProps) => {
+const EmptyView = ({style, title}: EmptyViewProps) => {
   return (
     <View style={style}>
-      <Text style={styles.title}>Empty ...</Text>
+      <Text style={styles.title}>{title ?? 'Empty ...'}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 30,
+    fontSize: 18,
     color: 'white',
     textAlign: 'center',
   },
 });
-export default EmptyList;
+export default EmptyView;

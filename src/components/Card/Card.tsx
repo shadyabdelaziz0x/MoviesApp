@@ -9,8 +9,8 @@ const Card = ({style, children}: CardProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    shadowColor: '#000',
+    backgroundColor: '#000',
+    shadowColor: 'white',
     shadowOpacity: 1,
     shadowRadius: 8,
     shadowOffset: {width: 0, height: 0},

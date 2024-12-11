@@ -1,6 +1,6 @@
 import {useState, useEffect, useCallback} from 'react';
 
-const useSearch = <F>(delay = 800) => {
+const useSearch = <F>(delay = 500) => {
   const [query, setQuery] = useState<F | null>(null);
   const [debouncedQuery, setDebouncedQuery] = useState<F | null>(null);
 

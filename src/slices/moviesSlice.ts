@@ -21,6 +21,7 @@ const initialState: MoviesState = {
 
 export enum MoviesActionType {
   FetchMovies = 'movies/fetchMovies',
+  FetchRandomMovies = 'movies/fetchRandomMovies',
 }
 
 const moviesMapper = (response: GetMoviesResponse): Array<Movie> => {
@@ -45,16 +46,30 @@ const getNRandomMovies = (movies: Array<Movie>, num: number): Array<Movie> => {
 
 export const fetchMovies = createAsyncThunk<
   {data: Array<Movie>},
-  {query: string; isInitial?: boolean},
+  {query: string},
   {state: AppState; rejectValue: RequestError}
 >(MoviesActionType.FetchMovies, async (input, {rejectWithValue}) => {
   try {
-    const data = await moviesService.getMovies(input.query);
+    const data = await moviesService.searchMovies(input.query);
     const movies = moviesMapper(data);
     return {
-      data: input.isInitial
-        ? getNRandomMovies(movies, INITIAL_MOVIES_NUMBER)
-        : movies,
+      data: movies,
+    };
+  } catch (err) {
+    return rejectWithValue(err as RequestError);
+  }
+});
+
+export const fetchRandomMovies = createAsyncThunk<
+  {data: Array<Movie>},
+  void,
+  {state: AppState; rejectValue: RequestError}
+>(MoviesActionType.FetchRandomMovies, async (_, {rejectWithValue}) => {
+  try {
+    const data = await moviesService.getRandomMovies();
+    const movies = moviesMapper(data);
+    return {
+      data: getNRandomMovies(movies, INITIAL_MOVIES_NUMBER),
     };
   } catch (err) {
     return rejectWithValue(err as RequestError);
@@ -78,6 +93,18 @@ const moviesSlice = createSlice({
         state.loading = 'pending';
       })
       .addCase(fetchMovies.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = 'idle';
+      })
+      .addCase(fetchRandomMovies.fulfilled, (state, action) => {
+        state.entities = action.payload.data;
+        state.loading = 'idle';
+        state.error = null;
+      })
+      .addCase(fetchRandomMovies.pending, state => {
+        state.loading = 'pending';
+      })
+      .addCase(fetchRandomMovies.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = 'idle';
       });

@@ -5,8 +5,9 @@ import {
   configureStore,
   ThunkAction,
 } from '@reduxjs/toolkit';
-import {persistStore, persistReducer} from 'redux-persist';
+// import {persistReducer} from 'redux-persist';
 import {movieDetailsReducer, moviesReducer} from '../slices';
+import logger from 'redux-logger';
 
 export type AppState = ReturnType<typeof appReducer>;
 
@@ -23,24 +24,24 @@ const rootReducer = (state: AppState | undefined, action: Action) => {
   return appReducer(state, action);
 };
 
-const persistConfig = {
-  key: 'root',
-  version: 1,
-  storage: AsyncStorage,
-};
+// const persistConfig = {
+//   key: 'root',
+//   version: 1,
+//   storage: AsyncStorage,
+// };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: false,
-    }),
+    }).concat(logger),
 });
 
-const persistor = persistStore(store);
+// const persistor = persistStore(store);
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
@@ -50,4 +51,4 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
-export {store, persistor};
+export {store /*persistor*/};

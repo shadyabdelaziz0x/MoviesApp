@@ -3,6 +3,7 @@ import {MovieDetails, RequestError, RequestStatus} from '../models';
 import {GetMovieDetailsResponse, moviesService} from '@shady0x7cb/network-sdk';
 import {ReducerType} from './types';
 import {AppState} from '../app/store';
+import uuid from 'react-native-uuid';
 
 export interface MoviesDetailsState {
   entity: MovieDetails | null;
@@ -21,16 +22,29 @@ export enum MovieDetailsActionType {
 }
 
 const movieMapper = (response: GetMovieDetailsResponse): MovieDetails => {
-  const movie: MovieDetails = {
+  return {
     id: response.imdbId,
     title: response.short.name,
-    keywords: response.short.keywords,
-    actors: [],
-    reviews: [],
+    keywords:
+      response.short.keywords?.split(',') ??
+      response.top.keywords?.edges?.map(keyword => keyword.node.text) ??
+      [],
+    actors: response.short.actor?.map(actor => ({
+      name: actor.name,
+      url: actor.url,
+    })),
+    reviews:
+      response.top.featuredReviews?.edges?.map(review => ({
+        id: uuid.v4(),
+        author: {
+          name: review.node.author.nickName,
+        },
+        body: review.node.text.originalText.plainText,
+        date: review.node.submissionDate,
+      })) ?? [],
     description: response.short.description,
-    poster: undefined,
+    poster: response.short.image,
   };
-  return movie;
 };
 
 export const fetchMovieDetails = createAsyncThunk<
@@ -41,7 +55,7 @@ export const fetchMovieDetails = createAsyncThunk<
   MovieDetailsActionType.FetchMovieDetails,
   async (input, {rejectWithValue}) => {
     try {
-      const data = await moviesService.getMovie(input.movieId);
+      const data = await moviesService.getMovieDetails(input.movieId);
       const movie = movieMapper(data);
       return {
         data: movie,
@@ -77,6 +91,6 @@ const movieDetailsSlice = createSlice({
 
 export const {resetMovieDetails} = movieDetailsSlice.actions;
 
-export const selectMovieDetails = (state: AppState) => state.movies;
+export const selectMovieDetails = (state: AppState) => state.movieDetails;
 
 export const movieDetailsReducer = movieDetailsSlice.reducer;
