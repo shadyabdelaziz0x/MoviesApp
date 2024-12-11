@@ -10,8 +10,15 @@ interface MovieCardProps {
 const MovieCard = ({movie}: MovieCardProps) => {
   return (
     <Card style={styles.card}>
-      <TouchableOpacity style={styles.card}>
-        <Image source={{uri: movie.poster}} style={styles.poster} />
+      <TouchableOpacity style={styles.button}>
+        <Image
+          source={{uri: movie.poster}}
+          style={[
+            styles.poster,
+            {aspectRatio: (movie.posterWidth ?? 1) / (movie.posterHeight ?? 1)},
+          ]}
+          resizeMode="cover"
+        />
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{movie.title}</Text>
         </View>
@@ -28,9 +35,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     shadowColor: '#fff',
   },
+  button: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+  },
   poster: {
-    width: 100,
-    height: 150,
+    height: 160,
     borderTopLeftRadius: 12,
     borderBottomLeftRadius: 12,
   },

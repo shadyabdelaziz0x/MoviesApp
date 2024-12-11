@@ -3,25 +3,29 @@ import {ListRenderItem, StyleSheet, Text} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {MovieCard, SearchList} from '../../components';
 import {Movie} from '../../models';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fetchMovies, selectMovies} from '../../slices';
 
-interface MoviesListProps {
-  movies: Array<Movie>;
-}
+const MoviesList = () => {
+  const dispatch = useAppDispatch();
+  const {entities} = useAppSelector(selectMovies);
 
-const MoviesList = ({movies}: MoviesListProps) => {
   const renderMovieItem: ListRenderItem<Movie> = useCallback(({item}) => {
     return <MovieCard movie={item} />;
   }, []);
 
-  const onFilter = useCallback((filterValue: string | null) => {
-    console.log('filterValue => ', filterValue);
-  }, []);
+  const onFilter = useCallback(
+    (filterValue: string | null) => {
+      filterValue && dispatch(fetchMovies({query: filterValue}));
+    },
+    [dispatch],
+  );
 
   return (
     <LinearGradient colors={['#000000', 'red']} style={styles.container}>
       <Text style={styles.header}>Movies</Text>
       <SearchList
-        data={movies}
+        data={entities}
         renderListItem={renderMovieItem}
         filter={onFilter}
       />

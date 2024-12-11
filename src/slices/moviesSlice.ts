@@ -5,6 +5,8 @@ import {ReducerType} from './types';
 import {AppState} from '../app/store';
 import {GetMoviesResponse} from '@shady0x7cb/network-sdk/dist/esm/types/getMoviesResponse';
 
+const INITIAL_MOVIES_NUMBER = 10;
+
 export interface MoviesState {
   entities: Array<Movie>;
   error: RequestError;
@@ -32,14 +34,28 @@ const moviesMapper = (response: GetMoviesResponse): Array<Movie> => {
   return movies;
 };
 
+const getNRandomMovies = (movies: Array<Movie>, num: number): Array<Movie> => {
+  const shuffled = [...movies]; // Create a copy to avoid mutating the original array
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled.slice(0, num);
+};
+
 export const fetchMovies = createAsyncThunk<
   {data: Array<Movie>},
-  {query: string},
+  {query: string; isInitial?: boolean},
   {state: AppState; rejectValue: RequestError}
 >(AllergensActionType.FetchMovies, async (input, {rejectWithValue}) => {
   try {
     const data = await moviesService.getMovies(input.query);
-    return {data: moviesMapper(data)};
+    const movies = moviesMapper(data);
+    return {
+      data: input.isInitial
+        ? getNRandomMovies(movies, INITIAL_MOVIES_NUMBER)
+        : movies,
+    };
   } catch (err) {
     return rejectWithValue(err as RequestError);
   }
