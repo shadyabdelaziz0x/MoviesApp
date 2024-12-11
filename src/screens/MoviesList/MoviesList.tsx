@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {ListRenderItem, StyleSheet, Text} from 'react-native';
+import {ListRenderItem, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {MovieCard, SearchList} from '../../components';
 import {Movie} from '../../models';
@@ -12,6 +12,10 @@ const MoviesList = () => {
 
   const renderMovieItem: ListRenderItem<Movie> = useCallback(({item}) => {
     return <MovieCard movie={item} />;
+  }, []);
+
+  const renderSeparator = useCallback(() => {
+    return <View style={styles.separator} />;
   }, []);
 
   const onFilter = useCallback(
@@ -28,6 +32,7 @@ const MoviesList = () => {
         data={entities}
         renderListItem={renderMovieItem}
         filter={onFilter}
+        renderSeparator={renderSeparator}
       />
     </LinearGradient>
   );
@@ -44,43 +49,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 20,
   },
-  card: {
-    backgroundColor: 'black',
-    borderRadius: 12,
-    marginBottom: 16,
-    flexDirection: 'row',
-    shadowColor: '#fff',
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    shadowOffset: {width: 0, height: 0},
-    elevation: 4,
-  },
-  poster: {
-    width: 100,
-    height: 150,
-    borderTopLeftRadius: 12,
-    borderBottomLeftRadius: 12,
-  },
-  infoContainer: {
-    flex: 1,
-    padding: 12,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 8,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  rating: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginLeft: 4,
-    color: '#fff',
+  separator: {
+    height: 16,
   },
 });
 
