@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {ListRenderItem, StyleSheet, Text, View} from 'react-native';
 import {EmptyView, MovieCard, SearchList} from '../../components';
 import {Movie} from '../../models';
@@ -7,12 +7,24 @@ import {fetchMovies, resetMovieDetails, selectMovies} from '../../slices';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {AppRoutes} from '../../navigation';
 import MoviesListSkeleton from './MoviesList.skeleton';
+import Toast from 'react-native-toast-message';
 
 const MoviesList = () => {
   const dispatch = useAppDispatch();
   const {navigate} = useNavigation<any>();
-  const {entities, loading} = useAppSelector(selectMovies);
+  const {entities, loading, error} = useAppSelector(selectMovies);
   const isLoading = loading === 'pending';
+
+  useEffect(() => {
+    if (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.message,
+        swipeable: true,
+      });
+    }
+  }, [error]);
 
   useFocusEffect(
     React.useCallback(() => {

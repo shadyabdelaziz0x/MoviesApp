@@ -1680,7 +1680,29 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNVectorIcons (10.2.0):
+  - RNSVG (15.10.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNSVG/common (= 15.10.1)
+    - Yoga
+  - RNSVG/common (15.10.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1781,7 +1803,7 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1929,8 +1951,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNVectorIcons:
-    :path: "../node_modules/react-native-vector-icons"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -2004,7 +2026,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 8542667cb39fff458c1a1a3f9e70205042636129
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNScreens: 06e1f09654d2da4ff95dee6621b2b13b033e9c5a
-  RNVectorIcons: a24016b773380b1aa37fca501ec6b94a951890a0
+  RNSVG: 588c85abb474f7ee58dd886ed1fe198cc73772b2
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748

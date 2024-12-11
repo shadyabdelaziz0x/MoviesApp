@@ -15,6 +15,7 @@ import {fetchMovieDetails, selectMovieDetails} from '../../slices';
 import {placeholder} from '../../assets';
 import MovieDetailsSkeleton from './MovieDetails.skeleton';
 import {Actor as ActorModel} from '../../models';
+import Toast from 'react-native-toast-message';
 
 type MovieDetailsRouteProp = RouteProp<
   AppStackParamList,
@@ -31,10 +32,21 @@ const ACTOR_SEPARATOR_LENGTH = 16;
 const MovieDetails = ({route}: MovieDetailsProps) => {
   const {movieId} = route.params; // Assume `movie` contains all required data
   const dispatch = useAppDispatch();
-  const {entity: movie, loading} = useAppSelector(selectMovieDetails);
+  const {entity: movie, loading, error} = useAppSelector(selectMovieDetails);
   const isLoading = loading === 'pending';
   const hasReviews = (movie?.reviews?.length ?? 0) > 0;
   const hasKeywords = (movie?.keywords?.length ?? 0) > 0;
+
+  useEffect(() => {
+    if (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.message,
+        swipeable: true,
+      });
+    }
+  }, [error]);
 
   useEffect(() => {
     dispatch(fetchMovieDetails({movieId}));
@@ -108,18 +120,20 @@ const MovieDetails = ({route}: MovieDetailsProps) => {
               </View>
               <View style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}>Reviews</Text>
-                {hasReviews ? (
-                  movie?.reviews?.map(review => (
-                    <Review
-                      key={review.id}
-                      author={review.author.name}
-                      body={review.body}
-                      rating={5}
-                    />
-                  ))
-                ) : (
-                  <EmptyView title={'Cannot Find Reviews'} />
-                )}
+                <View style={styles.reviewContainer}>
+                  {hasReviews ? (
+                    movie?.reviews?.map(review => (
+                      <Review
+                        key={review.id}
+                        author={review.author?.name}
+                        body={review.body}
+                        rating={review.rating}
+                      />
+                    ))
+                  ) : (
+                    <EmptyView title={'Cannot Find Reviews'} />
+                  )}
+                </View>
               </View>
             </View>
           </Fragment>
@@ -168,6 +182,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     rowGap: 20,
     columnGap: 20,
+  },
+  reviewContainer: {
+    marginVertical: 15,
   },
   separator: {
     width: ACTOR_SEPARATOR_LENGTH,

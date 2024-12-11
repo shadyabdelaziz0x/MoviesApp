@@ -3,11 +3,12 @@ import Card from '../Card';
 import {StyleSheet, Text, View} from 'react-native';
 import Image from '../Image';
 import {user} from '../../assets';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 
 interface ReviewProps {
-  author: string;
-  body: string;
-  rating: number;
+  author?: string;
+  body?: string;
+  rating?: number;
 }
 
 const Review = ({body, author, rating}: ReviewProps) => {
@@ -17,7 +18,7 @@ const Review = ({body, author, rating}: ReviewProps) => {
       <Text style={styles.body}>{body}</Text>
       <View style={styles.info}>
         <Text style={styles.name}>{author}</Text>
-        <Text style={styles.name}>{`${rating}`}</Text>
+        <StarRatingDisplay starSize={20} rating={rating ?? 0} />
       </View>
     </Card>
   );
@@ -35,7 +36,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     overflow: 'hidden',
   },
-  info: {},
+  info: {
+    gap: 10,
+  },
   body: {
     color: 'white',
   },

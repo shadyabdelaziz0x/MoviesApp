@@ -1,14 +1,15 @@
 interface Review {
   id: string;
-  author: {
+  author?: {
     name: string;
   };
-  date: string;
-  body: string;
+  date?: string;
+  body?: string;
+  rating?: number;
 }
 
 export interface Actor {
-  url: string;
+  url?: string;
   name: string;
 }
 

@@ -24,12 +24,12 @@ export enum MovieDetailsActionType {
 const movieMapper = (response: GetMovieDetailsResponse): MovieDetails => {
   return {
     id: response.imdbId,
-    title: response.short.name,
+    title: response.short?.name,
     keywords:
-      response.short.keywords?.split(',') ??
+      response.short?.keywords?.split(',') ??
       response.top.keywords?.edges?.map(keyword => keyword.node.text) ??
       [],
-    actors: response.short.actor?.map(actor => ({
+    actors: response.short?.actor?.map(actor => ({
       name: actor.name,
       url: actor.url,
     })),
@@ -37,10 +37,11 @@ const movieMapper = (response: GetMovieDetailsResponse): MovieDetails => {
       response.top.featuredReviews?.edges?.map(review => ({
         id: uuid.v4(),
         author: {
-          name: review.node.author.nickName,
+          name: review.node?.author?.nickName,
         },
-        body: review.node.text.originalText.plainText,
-        date: review.node.submissionDate,
+        body: review.node?.text?.originalText?.plainText,
+        date: review.node?.submissionDate,
+        rating: review.node?.authorRating ?? 0,
       })) ?? [],
     description: response.short.description,
     poster: response.short.image,

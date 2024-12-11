@@ -8,6 +8,7 @@ import SearchList from './SearchList';
 import Actor from './Actor';
 import Keyword from './Keyword';
 import Review from './Review';
+import ErrorBoundary from './ErrorBoundary';
 
 export {
   Actor,
@@ -20,4 +21,5 @@ export {
   Image,
   Keyword,
   Review,
+  ErrorBoundary,
 };
