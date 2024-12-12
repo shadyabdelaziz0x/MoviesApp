@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '../Card';
 import {StyleSheet, Text, View} from 'react-native';
-import Image from '../Image';
+import {Image} from 'react-native';
 import {user} from '../../assets';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 
@@ -14,7 +14,7 @@ interface ReviewProps {
 const Review = ({body, author, rating}: ReviewProps) => {
   return (
     <Card style={styles.container}>
-      <Image style={styles.image} defaultSource={user} />
+      <Image style={styles.image} source={user} resizeMode="contain" />
       <Text style={styles.body}>{body}</Text>
       <View style={styles.info}>
         <Text style={styles.name}>{author}</Text>

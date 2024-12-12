@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '../Card';
 import {StyleSheet, Text, View} from 'react-native';
-import Image from '../Image';
+import {Image} from 'react-native';
 import {user} from '../../assets';
 
 interface ActorProps {
@@ -11,7 +11,7 @@ interface ActorProps {
 const Actor = ({name}: ActorProps) => {
   return (
     <Card style={styles.container}>
-      <Image style={styles.image} defaultSource={user} resizeMode="contain" />
+      <Image style={styles.image} source={user} resizeMode="contain" />
       <View style={styles.info}>
         <Text numberOfLines={2} lineBreakMode={'tail'} style={styles.name}>
           {name ?? 'Unknown User'}

@@ -3,6 +3,7 @@ import FastImage, {
   ImageStyle,
   ResizeMode,
   Source,
+  Priority,
 } from 'react-native-fast-image';
 
 interface ImageProps {
@@ -10,17 +11,28 @@ interface ImageProps {
   src?: string | number;
   resizeMode?: ResizeMode;
   defaultSource?: number;
+  priority?: Priority;
+  cache?: 'immutable' | 'web' | 'cacheOnly';
 }
 
-const Image = ({style, src, resizeMode, defaultSource}: ImageProps) => {
+const Image = ({
+  style,
+  src,
+  resizeMode,
+  defaultSource,
+  priority,
+  cache,
+}: ImageProps) => {
   const source: Source | undefined | null = React.useMemo(
     () =>
       src
         ? {
             uri: `${src}`,
+            priority: priority ?? 'normal',
+            cache: cache ?? 'immutable',
           }
         : undefined,
-    [src],
+    [cache, priority, src],
   );
   return (
     <FastImage

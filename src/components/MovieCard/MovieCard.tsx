@@ -20,6 +20,7 @@ const MovieCard = ({movie, onClick}: MovieCardProps) => {
             style={styles.poster}
             resizeMode="contain"
             defaultSource={placeholder}
+            priority="high"
           />
         </View>
         <View style={styles.infoContainer}>
