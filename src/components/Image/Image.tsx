@@ -2,9 +2,11 @@ import React from 'react';
 import FastImage, {
   ImageStyle,
   ResizeMode,
-  Source,
   Priority,
 } from 'react-native-fast-image';
+import {createImageProgress} from 'react-native-image-progress';
+
+const ProgressImage = createImageProgress(FastImage);
 
 interface ImageProps {
   style?: ImageStyle;
@@ -23,19 +25,19 @@ const Image = ({
   priority,
   cache,
 }: ImageProps) => {
-  const source: Source | undefined | null = React.useMemo(
+  const source = React.useMemo(
     () =>
-      src
+      typeof src === 'string'
         ? {
             uri: `${src}`,
             priority: priority ?? 'normal',
             cache: cache ?? 'immutable',
           }
-        : undefined,
+        : src,
     [cache, priority, src],
   );
   return (
-    <FastImage
+    <ProgressImage
       style={style}
       source={source}
       resizeMode={resizeMode}

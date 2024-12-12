@@ -83,7 +83,7 @@ const MovieDetails = ({route}: MovieDetailsProps) => {
         ) : (
           <Fragment>
             <Image
-              src={movie?.poster}
+              src={movie?.poster ?? placeholder}
               style={styles.poster}
               resizeMode={'contain'}
               defaultSource={placeholder}
