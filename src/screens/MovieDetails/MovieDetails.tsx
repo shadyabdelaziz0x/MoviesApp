@@ -41,8 +41,8 @@ const MovieDetails = ({route}: MovieDetailsProps) => {
     if (error) {
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: error.message,
+        text1: error.message,
+        text2: error.description,
         swipeable: true,
       });
     }

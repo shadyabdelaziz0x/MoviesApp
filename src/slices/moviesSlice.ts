@@ -1,15 +1,17 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {Movie, RequestError, RequestStatus} from '../models';
+import {Movie, RequestStatus} from '../models';
 import {moviesService} from '@shady0x7cb/network-sdk';
 import {ReducerType} from './types';
 import {AppState} from '../app/store';
 import {GetMoviesResponse} from '@shady0x7cb/network-sdk';
+import {handleError, RequestError} from './error';
+import {AxiosError} from 'axios';
 
 const INITIAL_MOVIES_NUMBER = 10;
 
 export interface MoviesState {
   entities: Array<Movie>;
-  error: RequestError;
+  error: RequestError | null | undefined;
   loading: RequestStatus;
 }
 
@@ -56,7 +58,7 @@ export const fetchMovies = createAsyncThunk<
       data: movies,
     };
   } catch (err) {
-    return rejectWithValue(err as RequestError);
+    return rejectWithValue(handleError(err as AxiosError));
   }
 });
 
@@ -72,7 +74,7 @@ export const fetchRandomMovies = createAsyncThunk<
       data: getNRandomMovies(movies, INITIAL_MOVIES_NUMBER),
     };
   } catch (err) {
-    return rejectWithValue(err as RequestError);
+    return rejectWithValue(handleError(err as AxiosError));
   }
 });
 

@@ -4,14 +4,19 @@ import {EmptyView, MovieCard, SearchList} from '../../components';
 import {Movie} from '../../models';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchMovies, resetMovieDetails, selectMovies} from '../../slices';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {AppRoutes} from '../../navigation';
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
+import {AppRoutes, AppStackParamList} from '../../navigation';
 import MoviesListSkeleton from './MoviesList.skeleton';
 import Toast from 'react-native-toast-message';
 
 const MoviesList = () => {
   const dispatch = useAppDispatch();
-  const {navigate} = useNavigation<any>();
+  const {navigate} =
+    useNavigation<NavigationProp<AppStackParamList, AppRoutes.MoviesList>>();
   const {entities, loading, error} = useAppSelector(selectMovies);
   const isLoading = loading === 'pending';
 
@@ -19,8 +24,8 @@ const MoviesList = () => {
     if (error) {
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: error.message,
+        text1: error.message,
+        text2: error.description,
         swipeable: true,
       });
     }

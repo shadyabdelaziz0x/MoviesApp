@@ -1,13 +1,15 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {MovieDetails, RequestError, RequestStatus} from '../models';
+import {MovieDetails, RequestStatus} from '../models';
 import {GetMovieDetailsResponse, moviesService} from '@shady0x7cb/network-sdk';
 import {ReducerType} from './types';
 import {AppState} from '../app/store';
 import uuid from 'react-native-uuid';
+import {AxiosError} from 'axios';
+import {handleError, RequestError} from './error';
 
 export interface MoviesDetailsState {
   entity: MovieDetails | null;
-  error: RequestError;
+  error: RequestError | null | undefined;
   loading: RequestStatus;
 }
 
@@ -62,7 +64,7 @@ export const fetchMovieDetails = createAsyncThunk<
         data: movie,
       };
     } catch (err) {
-      return rejectWithValue(err as RequestError);
+      return rejectWithValue(handleError(err as AxiosError));
     }
   },
 );
