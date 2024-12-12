@@ -3,7 +3,12 @@ import {ListRenderItem, StyleSheet, Text, View} from 'react-native';
 import {EmptyView, MovieCard, SearchList} from '../../components';
 import {Movie} from '../../models';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fetchMovies, resetMovieDetails, selectMovies} from '../../slices';
+import {
+  fetchMovies,
+  fetchRandomMovies,
+  resetMovieDetails,
+  selectMovies,
+} from '../../slices';
 import {
   NavigationProp,
   useFocusEffect,
@@ -61,8 +66,13 @@ const MoviesList = () => {
   }, []);
 
   const onFilter = useCallback(
-    (filterValue: string | null) => {
-      filterValue && dispatch(fetchMovies({query: filterValue}));
+    (filterValue: string) => {
+      const query = filterValue.trim();
+      if (query.length > 0) {
+        dispatch(fetchMovies({query}));
+      } else {
+        dispatch(fetchRandomMovies());
+      }
     },
     [dispatch],
   );

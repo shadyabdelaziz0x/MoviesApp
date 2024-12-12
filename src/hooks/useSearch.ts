@@ -1,8 +1,8 @@
 import {useState, useEffect, useCallback} from 'react';
 
-const useSearch = <F>(delay = 500) => {
-  const [query, setQuery] = useState<F | null>(null);
-  const [debouncedQuery, setDebouncedQuery] = useState<F | null>(null);
+const useSearch = <F>(initialValue: F, delay = 500) => {
+  const [query, setQuery] = useState<F>(initialValue);
+  const [debouncedQuery, setDebouncedQuery] = useState<F>(initialValue);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -18,7 +18,7 @@ const useSearch = <F>(delay = 500) => {
     setQuery(searchValue); // Update query immediately
   }, []);
 
-  const clearQuery = useCallback(() => setQuery(null), []);
+  const clearQuery = useCallback(() => setQuery(initialValue), [initialValue]);
 
   return {
     query,

@@ -5,7 +5,6 @@ import {
   ThunkAction,
 } from '@reduxjs/toolkit';
 import {movieDetailsReducer, moviesReducer} from '../slices';
-import logger from 'redux-logger';
 
 export type AppState = ReturnType<typeof appReducer>;
 
@@ -27,7 +26,7 @@ const store = configureStore({
     getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: false,
-    }).concat(logger),
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;

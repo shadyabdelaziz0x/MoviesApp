@@ -11,7 +11,7 @@ interface ActorProps {
 const Actor = ({name}: ActorProps) => {
   return (
     <Card style={styles.container}>
-      <Image style={styles.image} src={user} resizeMode="contain" />
+      <Image style={styles.image} defaultSource={user} resizeMode="contain" />
       <View style={styles.info}>
         <Text numberOfLines={2} lineBreakMode={'tail'} style={styles.name}>
           {name ?? 'Unknown User'}

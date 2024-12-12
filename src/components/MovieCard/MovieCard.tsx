@@ -16,9 +16,10 @@ const MovieCard = ({movie, onClick}: MovieCardProps) => {
       <TouchableOpacity onPress={onClick} style={styles.button}>
         <View style={styles.imageContainer}>
           <Image
-            src={movie.poster ?? placeholder}
+            src={movie.poster}
             style={styles.poster}
             resizeMode="contain"
+            defaultSource={placeholder}
           />
         </View>
         <View style={styles.infoContainer}>

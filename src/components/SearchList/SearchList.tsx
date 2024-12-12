@@ -9,7 +9,7 @@ interface SearchListProps<T extends {id: string}> {
   data: T[]; // Generic data prop
   isLoading?: boolean;
   renderListItem: ListRenderItem<T>;
-  filter: (filterValue: string | null) => void;
+  filter: (filterValue: string) => void;
   renderSeparator: () => React.ReactNode;
   renderEmptyView?: () => React.ReactNode;
   LoadingView: () => React.ReactNode;
@@ -27,7 +27,7 @@ const SearchList = <T extends {id: string}>({
   renderEmptyView,
   LoadingView,
 }: SearchListProps<T>) => {
-  const {query, updateQuery, debouncedQuery} = useSearch<string>();
+  const {query, updateQuery, debouncedQuery} = useSearch<string>('');
 
   useEffect(() => {
     filter(debouncedQuery);

@@ -1,28 +1,35 @@
 import React from 'react';
-import FastImage, {ImageStyle, ResizeMode} from 'react-native-fast-image';
-import {createImageProgress} from 'react-native-image-progress';
+import FastImage, {
+  ImageStyle,
+  ResizeMode,
+  Source,
+} from 'react-native-fast-image';
 
 interface ImageProps {
   style?: ImageStyle;
   src?: string | number;
   resizeMode?: ResizeMode;
+  defaultSource?: number;
 }
 
-const ProgressImage = createImageProgress(FastImage);
-
-const Image = ({style, src, resizeMode}: ImageProps) => {
-  const source = React.useMemo(
+const Image = ({style, src, resizeMode, defaultSource}: ImageProps) => {
+  const source: Source | undefined | null = React.useMemo(
     () =>
-      typeof src === 'number'
-        ? src
-        : {
+      src
+        ? {
             uri: `${src}`,
-          },
+          }
+        : undefined,
     [src],
   );
   return (
-    <ProgressImage style={style} source={source} resizeMode={resizeMode} />
+    <FastImage
+      style={style}
+      source={source}
+      resizeMode={resizeMode}
+      defaultSource={defaultSource}
+    />
   );
 };
 
-export default Image;
+export default React.memo(Image);

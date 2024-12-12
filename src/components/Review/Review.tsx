@@ -14,7 +14,7 @@ interface ReviewProps {
 const Review = ({body, author, rating}: ReviewProps) => {
   return (
     <Card style={styles.container}>
-      <Image style={styles.image} src={user} />
+      <Image style={styles.image} defaultSource={user} />
       <Text style={styles.body}>{body}</Text>
       <View style={styles.info}>
         <Text style={styles.name}>{author}</Text>
